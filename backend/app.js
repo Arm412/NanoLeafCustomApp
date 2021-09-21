@@ -46,7 +46,7 @@ app.use(cookieParser());
 app.get('/getNanoLeafData', (req, res) => {
 	let returnedData = {};
 	axios
-    .get('http://192.168.1.175:16021/api/v1/' + process.env.NANO_TOKEN + '/effects/effectsList', {
+    .get(process.env.NANOLEAF_IP + '/api/v1/' + process.env.NANO_TOKEN + '/effects/effectsList', {
         withCredentials: true
     }).then((response) => {
 		returnedData = response.data;
@@ -57,12 +57,12 @@ app.get('/getNanoLeafData', (req, res) => {
 	});
 });
 
-app.get('/getCurrentEffect', (req, res) => {
-	var data = '{"brightness" : {"value":10, "duration":1}}';
+app.post('/getCurrentEffect', (req, res) => {
+	var data = '{"brightness" : {"value":90, "duration":1}}';
 
 	var config = {
   		method: 'put',
-  		url: 'http://192.168.1.175:16021/api/v1/' + process.env.NANO_TOKEN + '/state',
+  		url: process.env.NANOLEAF_IP + '/api/v1/' + process.env.NANO_TOKEN + '/state',
   		headers: { },
   		data : data
 	};
