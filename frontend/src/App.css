@@ -1,0 +1,22 @@
+/* ./src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main-btn {
+    @apply  py-10 px-4 mb-5 rounded-lg;
+    min-width: 250px;
+  }
+  .btn-green {
+    background-color: theme('colors.secondarygreen');
+    color: theme('colors.primarygreen');
+  }
+
+.primary-bg-100 {
+  background-color: black;
+  min-height: 100vh;
+}
+
+.white-text {
+  color: white;
+}

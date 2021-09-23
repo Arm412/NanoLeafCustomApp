@@ -1,22 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import QueueMode from "./QueueMode";
+import RandomMode from "./RandomMode";
+import ManualMode from "./ManualMode";
+
+const METHODS = {
+    GET: "GET",
+    POST: "POST"
+}
 
 export const NanoLeafHome = () => {
     const [effectsLoaded, setEffectsLoaded] = useState(true);
     const [updatingState, setUpdatingState] = useState(true);
+    const [nanoState, setNanoState] = useState('MANUAL');
     const effectsList = useRef([]);
 
     useEffect(() => {
-        // Did this to fix console warning
-        const fetchEffects = async (expressEndpoint) => {
-            if(!effectsLoaded){
-                effectsList.current = await sendCommand(expressEndpoint, "GET");
-                setEffectsLoaded(true);
-            } else {
-                console.log(effectsList.current);
-            }
+        const getFromNanoLeaf = async () => {
+            sendCommand("/getNanoLeafData", METHODS.GET)
+			.then((effectListJson) => {
+				effectsList.current = effectListJson;
+				setEffectsLoaded(true);
+			})
+			.catch((message) => {
+				console.log(message);
+			});
         }
-        fetchEffects("/getNanoLeafData");
+        getFromNanoLeaf();
+    }, [])
+
+    useEffect(() => {
+        // Did this to fix console warning
+        if (effectsLoaded) {
+            console.log(effectsList.current);
+        }
 	}, [effectsLoaded]);
 
     useEffect(() => {
@@ -35,10 +52,7 @@ export const NanoLeafHome = () => {
     // Do things with the config if needed
     const sendCommand = async (url, method) => {
         let data = null;
-        if(method === "POST"){
-            
-            console.log("POST - URL: " + url);
-            console.log("Method: " + method);
+        if(method === METHODS.POST){
             var config = {
                 method: 'post',
                 url: url,
@@ -50,30 +64,32 @@ export const NanoLeafHome = () => {
                 console.log(data);
             }
         }
-        else if(method === "GET") {
-            
-            console.log("GET - URL: " + url);
-            console.log("Method: " + method);
+        else if(method === METHODS.GET) {
             const data = await axios.get(url, {withCredentials: true});
             console.log(data.data);
             return data.data;
         }
-        
     }
 
     return (
-        <div>
-            <button onClick={() => setEffectsLoaded(false)} >Button</button>
-            <button onClick={() => setUpdatingState(false)} >Button</button>
-            {effectsLoaded ? 
-            <div>
-                {effectsList.current.map((effect) => (
-							<p key={effect}>
-								{effect}
-							</p>
-						))}
+        <div className="primary-bg-100 pt-16 w-screen">
+            <div className="flex-wrap flex w-full lg:flex-nowrap">
+                <div className="flex-1 mx-10 text-4xl">
+                    <button className="main-btn btn-green w-full" onClick={() => setNanoState("MANUAL")} >MANUAL</button>
+                </div>
+                <div className="flex-1 mx-10 text-4xl">
+                    <button className="main-btn btn-green w-full" onClick={() => setNanoState("RANDOM")} >RANDOM</button>
+                </div>
+                <div className="flex-1 mx-10 text-4xl">
+                    <button className="main-btn btn-green w-full" onClick={() => setNanoState("QUEUE")} >QUEUE</button>
+                </div>
             </div>
-             : <p>No Data Displayed</p>} 
+            {nanoState === "MANUAL" ? 
+            <ManualMode /> : null}
+            {nanoState === "RANDOM" ?
+            <RandomMode /> : null }
+            {nanoState === "QUEUE" ?
+            <QueueMode /> : null} 
         </div>
     )
 }

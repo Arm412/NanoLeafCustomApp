@@ -17,28 +17,28 @@ app.use(express.static(path.join(__dirname, '..', 'react-client', 'build')));
 
 const dbString = 'mongodb://127.0.0.1:27017/';
 
-try {
-	/*app.use(
-		session({
-			key: 'sessionID',
-			secret: process.env.MONGO_SECRET,
-			resave: false,
-			saveUninitialized: false,
-			cookie: {
-				httpOnly: true,
-				maxAge: parseInt(process.env.SESSION_MAX_AGE),
-				secure: false,
-			},
-			/*store: MongoStore.create({
-				mongoUrl: dbString,
-				collectionName: 'sessions',
-			}),/
-		})
-	);*/
-} catch (err) {
-	console.log('There was a problem creating the session store.');
-	console.log(err);
-}
+// try {
+// 	// app.use(
+// 		// session({
+// 		// 	key: 'sessionID',
+// 		// 	secret: process.env.MONGO_SECRET,
+// 		// 	resave: false,
+// 		// 	saveUninitialized: false,
+// 		// 	cookie: {
+// 		// 		httpOnly: true,
+// 		// 		maxAge: parseInt(process.env.SESSION_MAX_AGE),
+// 		// 		secure: false,
+// 		// 	},
+// 		// 	store: MongoStore.create({
+// 		// 		mongoUrl: dbString,
+// 		// 		collectionName: 'nanoleaf',
+// 		// 	}),
+// 		// })
+// 	// );
+// } catch (err) {
+// 	console.log('There was a problem creating the session store.');
+// 	console.log(err);
+// }
 
 app.use(express.json());
 app.use(cookieParser());
