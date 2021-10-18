@@ -9,11 +9,18 @@ const METHODS = {
     POST: "POST"
 }
 
-export const NanoLeafHome = () => {
+const NanoLeafHome = () => {
     const [effectsLoaded, setEffectsLoaded] = useState(true);
-    const [updatingState, setUpdatingState] = useState(true);
-    const [nanoState, setNanoState] = useState('MANUAL');
+    const [updatingState, setUpdatingState] = useState(false);
+    const [nanoState, setNanoState] = useState('NONE');
     const effectsList = useRef([]);
+    const selectedEffect = useRef("");
+
+    const effectSetClick = (e) => {
+        selectedEffect.current = e;
+        console.log(selectedEffect.current);
+        setUpdatingState(true);
+    }
 
     useEffect(() => {
         const getFromNanoLeaf = async () => {
@@ -38,34 +45,39 @@ export const NanoLeafHome = () => {
 
     useEffect(() => {
         const postToNanoleaf = async (expressEndpoint) => {
-            if(!updatingState){
-                effectsList.current = await sendCommand(expressEndpoint, "POST");
-                setEffectsLoaded(true);
+            if(updatingState){
+                console.log("Updating State: " + selectedEffect.current);
+                sendCommand(expressEndpoint, "POST", {effect: selectedEffect.current});
+                setUpdatingState(false);
             } else {
-                console.log(effectsList.current);
+                console.log("Update Ended");
             }
         }
-        postToNanoleaf("/getCurrentEffect");
+        postToNanoleaf("/setCurrentEffect");
     }, [updatingState]);
 
 
     // Do things with the config if needed
-    const sendCommand = async (url, method) => {
+    const sendCommand = async (url, method, body) => {
         let data = null;
+        console.log(selectedEffect.current);
         if(method === METHODS.POST){
             var config = {
                 method: 'post',
                 url: url,
-                headers: { },
-                data : data
+                data : body,
+                headers: {
+                    'Content-Type': 'application/json'
+                 },
             };
+            console.log(config);
             data = await axios(config);
             if (data != null) {
                 console.log(data);
             }
         }
         else if(method === METHODS.GET) {
-            const data = await axios.get(url, {withCredentials: true});
+            data = await axios.get(url, {withCredentials: true});
             console.log(data.data);
             return data.data;
         }
@@ -75,17 +87,17 @@ export const NanoLeafHome = () => {
         <div className="primary-bg-100 pt-16 w-screen">
             <div className="flex-wrap flex w-full lg:flex-nowrap">
                 <div className="flex-1 mx-10 text-4xl">
-                    <button className="main-btn btn-green w-full" onClick={() => setNanoState("MANUAL")} >MANUAL</button>
+                    <button className="main-btn" onClick={() => setNanoState("MANUAL")} >MANUAL</button>
                 </div>
                 <div className="flex-1 mx-10 text-4xl">
-                    <button className="main-btn btn-green w-full" onClick={() => setNanoState("RANDOM")} >RANDOM</button>
+                    <button className="main-btn" onClick={() => setNanoState("RANDOM")} >RANDOM</button>
                 </div>
                 <div className="flex-1 mx-10 text-4xl">
-                    <button className="main-btn btn-green w-full" onClick={() => setNanoState("QUEUE")} >QUEUE</button>
+                    <button className="main-btn" onClick={() => setNanoState("QUEUE")} >QUEUE</button>
                 </div>
             </div>
             {nanoState === "MANUAL" ? 
-            <ManualMode /> : null}
+            <ManualMode effectsList={effectsList.current} onEffectClick={effectSetClick} /> : null}
             {nanoState === "RANDOM" ?
             <RandomMode /> : null }
             {nanoState === "QUEUE" ?
@@ -93,3 +105,5 @@ export const NanoLeafHome = () => {
         </div>
     )
 }
+
+export default NanoLeafHome

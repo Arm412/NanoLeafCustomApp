@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn-green {
+  background-color: theme('colors.secondary');
+  color: theme('colors.primary');
+}
+.btn-green-invert {
+    background-color: theme('colors.primary');
+    color: theme('colors.secondary');
+}
+
+.main-btn {
+  @apply py-10 px-4 mb-5 rounded-lg btn-green w-full;
+  min-width: 250px;
+}
+
+.primary-bg-100 {
+  background-color: black;
+  min-height: 100vh;
+}
+
+.effectDiv {
+  @apply mx-auto p-5 m-2 flex;
+}
+
+#manualMode {
+  @apply h-80 flex w-screen;
+}
+
+.man-effect-container {
+  @apply box-border flex-none w-1/2 border-4 border-green-900 border-opacity-100 flex;
+}
+
+.effect-scroll{
+  @apply flex-1 w-1/4 overflow-auto;
+}
+
+.man-effect-desc-div{
+  @apply flex-1 bg-gray-900;
+}

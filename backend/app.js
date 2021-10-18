@@ -50,23 +50,25 @@ app.get('/getNanoLeafData', (req, res) => {
         withCredentials: true
     }).then((response) => {
 		returnedData = response.data;
-		console.log(returnedData);
 		res.send(returnedData);
     }).catch((message) => {
-		console.log(message);
+		//console.log(message);
 	});
 });
 
-app.post('/getCurrentEffect', (req, res) => {
-	var data = '{"brightness" : {"value":90, "duration":1}}';
+app.post('/setCurrentEffect', (req, res) => {
+	console.log(req.body.effect);
+	let chosenEffect = req.body.effect; 
+	var data = '{"select" : "' + chosenEffect + '"}';
 
 	var config = {
   		method: 'put',
-  		url: process.env.NANOLEAF_IP + '/api/v1/' + process.env.NANO_TOKEN + '/state',
+  		url: process.env.NANOLEAF_IP + '/api/v1/' + process.env.NANO_TOKEN + '/effects',
   		headers: { },
   		data : data
 	};
 
+	let retVal = 400;
 	axios(config)
 	.then((response) => {
 		console.log("Success")
@@ -75,6 +77,7 @@ app.post('/getCurrentEffect', (req, res) => {
 	.catch((error) => {
   		console.log(error);
 	});
+	console.log("retVal: " + retVal);
 });
 
 app.get('*', (req, res) => {

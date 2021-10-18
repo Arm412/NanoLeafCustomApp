@@ -1,16 +1,15 @@
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'media', // or 'false' or 'class'
   theme: {
-    colors: {
-      primarygreen: '#41A950',
-      secondarygreen: '#030083',
+    extend: {
+      colors: {
+        primary: '#41A950',
+        secondary: '#030083',
+      },
     },
-    extend: {},
   },
-  variants: {
-    extend: {},
-  },
+  variants: {},
   plugins: [],
 }
 
