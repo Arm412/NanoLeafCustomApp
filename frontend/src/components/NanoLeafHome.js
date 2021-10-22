@@ -84,8 +84,8 @@ const NanoLeafHome = () => {
     }
 
     return (
-        <div className="primary-bg-100 pt-16 w-screen">
-            <div className="flex-wrap flex w-full lg:flex-nowrap">
+        <div className="primary-bg-100 w-screen">
+            <div className="flex-wrap flex w-full lg:flex-nowrap py-16">
                 <div className="flex-1 mx-10 text-4xl">
                     <button className="main-btn" onClick={() => setNanoState("MANUAL")} >MANUAL</button>
                 </div>
@@ -97,7 +97,7 @@ const NanoLeafHome = () => {
                 </div>
             </div>
             {nanoState === "MANUAL" ? 
-            <ManualMode effectsList={effectsList.current} onEffectClick={effectSetClick} /> : null}
+            <ManualMode effectsList={effectsList.current} onEffectClick={effectSetClick} selectedEffect={selectedEffect.current} /> : null}
             {nanoState === "RANDOM" ?
             <RandomMode /> : null }
             {nanoState === "QUEUE" ?
