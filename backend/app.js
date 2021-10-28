@@ -52,7 +52,7 @@ app.get('/getNanoLeafData', (req, res) => {
 		returnedData = response.data;
 		res.send(returnedData);
     }).catch((message) => {
-		//console.log(message);
+		console.log(message);
 	});
 });
 
@@ -68,7 +68,6 @@ app.post('/setCurrentEffect', (req, res) => {
   		data : data
 	};
 
-	let retVal = 400;
 	axios(config)
 	.then((response) => {
 		console.log("Success")
@@ -77,7 +76,6 @@ app.post('/setCurrentEffect', (req, res) => {
 	.catch((error) => {
   		console.log(error);
 	});
-	console.log("retVal: " + retVal);
 });
 
 app.get('*', (req, res) => {

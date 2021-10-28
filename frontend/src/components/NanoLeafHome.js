@@ -4,6 +4,8 @@ import QueueMode from "./QueueMode";
 import RandomMode from "./RandomMode";
 import ManualMode from "./ManualMode";
 
+export const EffectContext = React.createContext();
+
 const METHODS = {
     GET: "GET",
     POST: "POST"
@@ -84,25 +86,27 @@ const NanoLeafHome = () => {
     }
 
     return (
-        <div className="primary-bg-100 w-screen">
-            <div className="flex-wrap flex w-full lg:flex-nowrap py-16">
-                <div className="flex-1 mx-10 text-4xl">
-                    <button className="main-btn" onClick={() => setNanoState("MANUAL")} >MANUAL</button>
+        <EffectContext.Provider value={selectedEffect.current}>
+            <div className="primary-bg-100 w-screen">
+                <div className="flex-wrap flex w-full lg:flex-nowrap py-16">
+                    <div className="flex-1 mx-10 text-4xl">
+                        <button className="main-btn" onClick={() => setNanoState("MANUAL")} >MANUAL</button>
+                    </div>
+                    <div className="flex-1 mx-10 text-4xl">
+                        <button className="main-btn" onClick={() => setNanoState("RANDOM")} >RANDOM</button>
+                    </div>
+                    <div className="flex-1 mx-10 text-4xl">
+                        <button className="main-btn" onClick={() => setNanoState("QUEUE")} >QUEUE</button>
+                    </div>
                 </div>
-                <div className="flex-1 mx-10 text-4xl">
-                    <button className="main-btn" onClick={() => setNanoState("RANDOM")} >RANDOM</button>
-                </div>
-                <div className="flex-1 mx-10 text-4xl">
-                    <button className="main-btn" onClick={() => setNanoState("QUEUE")} >QUEUE</button>
-                </div>
+                {nanoState === "MANUAL" ? 
+                <ManualMode effectsList={effectsList.current} onEffectClick={effectSetClick} selectedEffect={selectedEffect.current} /> : null}
+                {nanoState === "RANDOM" ?
+                <RandomMode /> : null }
+                {nanoState === "QUEUE" ?
+                <QueueMode /> : null} 
             </div>
-            {nanoState === "MANUAL" ? 
-            <ManualMode effectsList={effectsList.current} onEffectClick={effectSetClick} selectedEffect={selectedEffect.current} /> : null}
-            {nanoState === "RANDOM" ?
-            <RandomMode /> : null }
-            {nanoState === "QUEUE" ?
-            <QueueMode /> : null} 
-        </div>
+        </EffectContext.Provider>
     )
 }
 
