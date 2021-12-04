@@ -4,7 +4,7 @@ import QueueMode from "./QueueMode";
 import RandomMode from "./RandomMode";
 import ManualMode from "./ManualMode";
 
-export const EffectContext = React.createContext();
+export const EffectContext = React.createContext<string | undefined>(undefined);
 
 const METHODS = {
     GET: "GET",
@@ -18,15 +18,19 @@ const NanoLeafHome = () => {
     const effectsList = useRef([]);
     const selectedEffect = useRef("");
 
-    const effectSetClick = (e) => {
+    const effectSetClick = (e: string) => {
         selectedEffect.current = e;
         console.log(selectedEffect.current);
         setUpdatingState(true);
     }
 
+    const testPut = () => {
+        console.log("Put");
+    }
+
     useEffect(() => {
         const getFromNanoLeaf = async () => {
-            sendCommand("/getNanoLeafData", METHODS.GET)
+            sendCommand("/getNanoLeafData", METHODS.GET, {})
 			.then((effectListJson) => {
 				effectsList.current = effectListJson;
 				setEffectsLoaded(true);
@@ -46,7 +50,7 @@ const NanoLeafHome = () => {
 	}, [effectsLoaded]);
 
     useEffect(() => {
-        const postToNanoleaf = async (expressEndpoint) => {
+        const postToNanoleaf = async (expressEndpoint: string) => {
             if(updatingState){
                 console.log("Updating State: " + selectedEffect.current);
                 sendCommand(expressEndpoint, "POST", {effect: selectedEffect.current});
@@ -58,13 +62,12 @@ const NanoLeafHome = () => {
         postToNanoleaf("/setCurrentEffect");
     }, [updatingState]);
 
-
     // Do things with the config if needed
-    const sendCommand = async (url, method, body) => {
+    const sendCommand = async (url: string, method: string, body: object) => {
         let data = null;
         console.log(selectedEffect.current);
         if(method === METHODS.POST){
-            var config = {
+            let config = {
                 method: 'post',
                 url: url,
                 data : body,
@@ -73,7 +76,7 @@ const NanoLeafHome = () => {
                  },
             };
             console.log(config);
-            data = await axios(config);
+            data = await axios.post(url, body);
             if (data != null) {
                 console.log(data);
             }
@@ -97,6 +100,9 @@ const NanoLeafHome = () => {
                     </div>
                     <div className="flex-1 mx-10 text-4xl">
                         <button className="main-btn" onClick={() => setNanoState("QUEUE")} >QUEUE</button>
+                    </div>
+                    <div className="flex-1 mx-10 text-4xl">
+                        <button className="main-btn" onClick={() => testPut()} >Test</button>
                     </div>
                 </div>
                 {nanoState === "MANUAL" ? 

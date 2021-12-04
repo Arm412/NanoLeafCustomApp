@@ -1,7 +1,13 @@
 import React from 'react'
 import EffectList from './EffectList'
 
-const ManualMode = (props) => {
+ type ManualModeProps = {
+    effectsList: string[];
+    onEffectClick: Function;
+    selectedEffect: string;
+}
+
+const ManualMode = (props: ManualModeProps) => {
     return (
         <div id="manualMode" className="w-full" >
             <div className="flex-1"></div>
@@ -21,11 +27,6 @@ const ManualMode = (props) => {
             <div className="flex-1"></div>
         </div>
     )
-}
-
-EffectList.defaultProps = {
-    effectsList: [],
-    onEffectClick: ()=>{},
 }
 
 export default ManualMode

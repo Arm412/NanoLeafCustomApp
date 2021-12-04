@@ -1,6 +1,11 @@
 import React from 'react'
 
-const EffectList = (props) => {
+type EffectListProps = {
+    effectName: string;
+    onEffectClick: Function;
+}
+
+const EffectList = (props: EffectListProps) => {
     return (
         <div className="effectDiv text-green-600 cursor-pointer hover:bg-green-900" onClick={() => {props.onEffectClick(props.effectName)}}>
             <div className="flex-1 flex flex-col">
