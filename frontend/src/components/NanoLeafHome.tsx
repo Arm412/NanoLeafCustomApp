@@ -24,8 +24,18 @@ const NanoLeafHome = () => {
         setUpdatingState(true);
     }
 
-    const testPut = () => {
-        console.log("Put");
+    const updateEffects = () => {
+        const updateEffectsList = async () => {
+            sendCommand("/updateEffectsList", METHODS.POST, {})
+			.then((effectListJson) => {
+				effectsList.current = effectListJson;
+				setEffectsLoaded(true);
+			})
+			.catch((message) => {
+				console.log(message);
+			});
+        }
+        updateEffectsList();
     }
 
     useEffect(() => {
@@ -102,7 +112,7 @@ const NanoLeafHome = () => {
                         <button className="main-btn" onClick={() => setNanoState("QUEUE")} >QUEUE</button>
                     </div>
                     <div className="flex-1 mx-10 text-4xl">
-                        <button className="main-btn" onClick={() => testPut()} >Test</button>
+                        <button className="main-btn" onClick={() => updateEffects()} >Test</button>
                     </div>
                 </div>
                 {nanoState === "MANUAL" ? 
