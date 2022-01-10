@@ -43,7 +43,7 @@ app.post('/setCurrentEffect', (req: Request, res: Response) => {
 
 	axios(config)
 	.then((response: any) => {
-		console.log("Success")
+		console.log("Success");
   		console.log(JSON.stringify(response.data));
 	})
 	.catch((error: string) => {
@@ -58,10 +58,6 @@ app.post('/updateEffectsList', async (req: Request, res: Response) => {
 	const retrievedEffectList:Array<String> = await fetchEffectsList() || [];
 	await deleteEffectsList();
 	await updateEffectsList(retrievedEffectList);
-});
-
-app.get('*', (req, res) => {
-	//res.sendFile(path.join(__dirname, '..', 'frontend/build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 80;
