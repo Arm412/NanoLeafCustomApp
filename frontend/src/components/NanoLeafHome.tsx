@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import QueueMode from "./QueueMode";
-import RandomMode from "./RandomMode";
-import ManualMode from "./ManualMode";
+import {QueueMode, RandomMode, ManualMode} from './index';
 
 export const EffectContext = React.createContext<string | undefined>(undefined);
 
