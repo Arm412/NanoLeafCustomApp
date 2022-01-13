@@ -1,5 +1,5 @@
 import React from 'react'
-import EffectList from './EffectList'
+import EffectList from '../EffectList'
 
  type ManualModeProps = {
     effectsList: string[];
