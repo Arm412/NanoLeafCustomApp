@@ -7,8 +7,8 @@
   color: theme('colors.primary');
 }
 .btn-green-invert {
-    background-color: theme('colors.primary');
-    color: theme('colors.secondary');
+  background-color: theme('colors.primary');
+  color: theme('colors.secondary');
 }
 
 .main-btn {
@@ -21,6 +21,6 @@
   min-height: 100vh;
 }
 
-.effectDiv{
+.effectDiv {
   @apply mx-auto p-5 m-2 flex;
 }

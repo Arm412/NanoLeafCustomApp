@@ -1,6 +1,6 @@
 //const express = require('express');
 import express from 'express';
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -44,47 +44,59 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get('/getNanoLeafData', (req: Request, res: Response) => {
-	let returnedData = {};
-	axios
-    .get(process.env.NANOLEAF_IP + '/api/v1/' + process.env.NANO_TOKEN + '/effects/effectsList', {
+  let returnedData = {};
+  axios
+    .get(
+      process.env.NANOLEAF_IP +
+        '/api/v1/' +
+        process.env.NANO_TOKEN +
+        '/effects/effectsList',
+      {
         withCredentials: true
-    }).then((response: any) => {
-		returnedData = response.data;
-		res.send(returnedData);
-    }).catch((message: String) => {
-		console.log(message);
-	});
+      }
+    )
+    .then((response: any) => {
+      returnedData = response.data;
+      res.send(returnedData);
+    })
+    .catch((message: String) => {
+      console.log(message);
+    });
 });
 
 app.post('/setCurrentEffect', (req, res) => {
-	console.log(req.body.effect);
-	let chosenEffect = req.body.effect; 
-	var data = '{"select" : "' + chosenEffect + '"}';
+  console.log(req.body.effect);
+  let chosenEffect = req.body.effect;
+  var data = '{"select" : "' + chosenEffect + '"}';
 
-	var config: AxiosRequestConfig = {
-  		method: 'put',
-  		url: process.env.NANOLEAF_IP + '/api/v1/' + process.env.NANO_TOKEN + '/effects',
-  		headers: { },
-  		data : data
-	};
+  var config: AxiosRequestConfig = {
+    method: 'put',
+    url:
+      process.env.NANOLEAF_IP +
+      '/api/v1/' +
+      process.env.NANO_TOKEN +
+      '/effects',
+    headers: {},
+    data: data
+  };
 
-	axios(config)
-	.then((response: any) => {
-		console.log("Success")
-  		console.log(JSON.stringify(response.data));
-	})
-	.catch((error: string) => {
-  		console.log(error);
-	});
+  axios(config)
+    .then((response: any) => {
+      console.log('Success');
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error: string) => {
+      console.log(error);
+    });
 });
 
 app.get('*', (req, res) => {
-	//res.sendFile(path.join(__dirname, '..', 'frontend/build', 'index.html'));
+  //res.sendFile(path.join(__dirname, '..', 'frontend/build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 80;
 
 app.listen(PORT, () => {
-	console.log(ip.address());
-	console.log('Listening on Port: ' + PORT);
+  console.log(ip.address());
+  console.log('Listening on Port: ' + PORT);
 });
