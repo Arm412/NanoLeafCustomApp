@@ -6,6 +6,10 @@ import dotenv from 'dotenv';
 import path from 'path';
 import ip from 'ip';
 import axios, { AxiosRequestConfig } from 'axios';
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+import {updateEffectsList, deleteEffectsList, getStoredEffects} from "./helpers/dbHelpers";
+import {fetchEffectsList} from "./helpers/leafHelpers";
 
 dotenv.config();
 
@@ -15,59 +19,24 @@ const app = express();
 // Serve static files
 app.use(express.static(path.join(__dirname, '..', 'react-client', 'build')));
 
-const dbString = 'mongodb://127.0.0.1:27017/';
-
-// try {
-// 	// app.use(
-// 		// session({
-// 		// 	key: 'sessionID',
-// 		// 	secret: process.env.MONGO_SECRET,
-// 		// 	resave: false,
-// 		// 	saveUninitialized: false,
-// 		// 	cookie: {
-// 		// 		httpOnly: true,
-// 		// 		maxAge: parseInt(process.env.SESSION_MAX_AGE),
-// 		// 		secure: false,
-// 		// 	},
-// 		// 	store: MongoStore.create({
-// 		// 		mongoUrl: dbString,
-// 		// 		collectionName: 'nanoleaf',
-// 		// 	}),
-// 		// })
-// 	// );
-// } catch (err) {
-// 	console.log('There was a problem creating the session store.');
-// 	console.log(err);
-// }
+const dbString = 'mongodb://127.0.0.1:27017/NanoleafDB';
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/getNanoLeafData', (req: Request, res: Response) => {
-  let returnedData = {};
-  axios
-    .get(
-      process.env.NANOLEAF_IP +
-        '/api/v1/' +
-        process.env.NANO_TOKEN +
-        '/effects/effectsList',
-      {
-        withCredentials: true
-      }
-    )
-    .then((response: any) => {
-      returnedData = response.data;
-      res.send(returnedData);
-    })
-    .catch((message: String) => {
-      console.log(message);
-    });
+app.get('/getNanoLeafData', async (req: Request, res: Response) => {
+	res.send(await getStoredEffects());
 });
 
 app.post('/setCurrentEffect', (req, res) => {
   console.log(req.body.effect);
   let chosenEffect = req.body.effect;
   var data = '{"select" : "' + chosenEffect + '"}';
+// Sends command to update the current effect
+app.post('/setCurrentEffect', (req: Request, res: Response) => {
+	console.log(req.body.effect);
+	let chosenEffect = req.body.effect; 
+	var data = '{"select" : "' + chosenEffect + '"}';
 
   var config: AxiosRequestConfig = {
     method: 'put',
@@ -80,23 +49,28 @@ app.post('/setCurrentEffect', (req, res) => {
     data: data
   };
 
-  axios(config)
-    .then((response: any) => {
-      console.log('Success');
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error: string) => {
-      console.log(error);
-    });
+	axios(config)
+	.then((response: any) => {
+		console.log("Success");
+  		console.log(JSON.stringify(response.data));
+	})
+	.catch((error: string) => {
+  		console.log(error);
+	});
 });
 
-app.get('*', (req, res) => {
-  //res.sendFile(path.join(__dirname, '..', 'frontend/build', 'index.html'));
+// Updates the effects stored in the db
+app.post('/updateEffectsList', async (req: Request, res: Response) => {
+
+	// Call function to get list of Nanoleaf effects
+	const retrievedEffectList:Array<String> = await fetchEffectsList() || [];
+	await deleteEffectsList();
+	await updateEffectsList(retrievedEffectList);
 });
 
 const PORT = process.env.PORT || 80;
 
-app.listen(PORT, () => {
-  console.log(ip.address());
-  console.log('Listening on Port: ' + PORT);
+app.listen(PORT, async () => {
+	console.log(ip.address());
+	console.log('Listening on Port: ' + PORT);
 });

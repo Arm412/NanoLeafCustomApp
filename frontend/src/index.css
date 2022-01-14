@@ -2,17 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn-green {
+.btn-blue {
   background-color: theme('colors.secondary');
   color: theme('colors.primary');
 }
-.btn-green-invert {
+.btn-blue-invert {
   background-color: theme('colors.primary');
   color: theme('colors.secondary');
 }
 
 .main-btn {
-  @apply py-10 px-4 mb-5 rounded-lg btn-green w-full;
+  @apply py-10 px-4 mb-5 rounded-lg btn-blue w-full;
   min-width: 250px;
 }
 
@@ -39,4 +39,11 @@
 
 .man-effect-desc-div {
   @apply flex-1 bg-gray-900;
+}
+
+#fetchBtn {
+  position: absolute;
+  width: 100px;
+  top: 0;
+  right: 0;
 }
