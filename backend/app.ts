@@ -6,8 +6,6 @@ import dotenv from 'dotenv';
 import path from 'path';
 import ip from 'ip';
 import axios, { AxiosRequestConfig } from 'axios';
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
 import {
   updateEffectsList,
   deleteEffectsList,
