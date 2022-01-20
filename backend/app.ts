@@ -19,7 +19,7 @@ const router = express.Router();
 const app = express();
 
 // Serve static files
-app.use(express.static(path.join(__dirname, '..', 'react-client', 'build')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
 const dbString = 'mongodb://127.0.0.1:27017/NanoleafDB';
 
