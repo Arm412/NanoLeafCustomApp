@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import EffectList from '../EffectList';
+import { EffectContext } from '../NanoLeafHome';
 
 type ManualModeProps = {
   effectsList: string[];
@@ -29,7 +30,7 @@ const ManualMode = (props: ManualModeProps) => {
           )}
         </div>
         <div className="man-effect-desc-div">
-          <h1 className="text-indigo-400 text-center text-lg">
+          <h1 className="text-white text-center text-lg">
             {props.selectedEffect}
           </h1>
         </div>

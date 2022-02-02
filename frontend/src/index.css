@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 .btn-blue {
-  background-color: theme('colors.secondary');
-  color: theme('colors.primary');
+  background-color: theme('colors.background-gray');
+  color: theme('colors.text-primary');
 }
 .btn-blue-invert {
-  background-color: theme('colors.primary');
-  color: theme('colors.secondary');
+  background-color: theme('colors.text-primary');
+  color: theme('colors.background-gray');
 }
 
 .main-btn {
@@ -22,7 +22,13 @@
 }
 
 .effectDiv {
-  @apply mx-auto p-5 m-2 flex;
+  @apply mx-auto p-5 flex border-gray-700 cursor-pointer;
+  color: theme('colors.text-primary');
+}
+
+.effectDiv:hover {
+  background-color: #e1e1e1;
+  color: #141414;
 }
 
 #manualMode {
@@ -30,7 +36,8 @@
 }
 
 .man-effect-container {
-  @apply box-border flex-none w-1/2 border-4 border-green-900 border-opacity-100 flex;
+  @apply box-border flex-none w-1/2 border-4 border-opacity-100 flex;
+  border-color: theme('colors.background-gray');
 }
 
 .effect-scroll {
@@ -38,7 +45,9 @@
 }
 
 .man-effect-desc-div {
-  @apply flex-1 bg-gray-900;
+  @apply flex-1 border-l-4;
+  background-color: black;
+  border-color: theme('colors.background-gray');
 }
 
 #fetchBtn {

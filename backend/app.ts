@@ -63,6 +63,8 @@ app.post('/updateEffectsList', async (req: Request, res: Response) => {
   const retrievedEffectList: Array<String> = (await fetchEffectsList()) || [];
   await deleteEffectsList();
   await updateEffectsList(retrievedEffectList);
+  const effectsJson = await getStoredEffects();
+  res.json(effectsJson);
 });
 
 const PORT = process.env.PORT || 80;
