@@ -11,7 +11,6 @@ const METHODS = {
 
 const NanoLeafHome = () => {
   const [effectsLoaded, setEffectsLoaded] = useState(true);
-  const [updatingState, setUpdatingState] = useState(false);
   const [nanoState, setNanoState] = useState('NONE');
   const effectsList = useRef([]);
   const selectedEffect = useRef('');
@@ -19,21 +18,23 @@ const NanoLeafHome = () => {
   const effectSetClick = (e: string) => {
     selectedEffect.current = e;
     console.log(selectedEffect.current);
-    setUpdatingState(true);
+    const postToNanoleaf = async (expressEndpoint: string) => {
+      sendCommand(expressEndpoint, 'POST', {
+        effect: selectedEffect.current
+      });
+    };
+    postToNanoleaf('/setCurrentEffect');
   };
 
-  const updateEffects = () => {
-    const updateEffectsList = async () => {
-      sendCommand('/updateEffectsList', METHODS.POST, {})
-        .then((effectListJson) => {
-          effectsList.current = effectListJson;
-          setEffectsLoaded(true);
-        })
-        .catch((message) => {
-          console.log(message);
-        });
-    };
-    updateEffectsList();
+  const updateEffectsList = async () => {
+    sendCommand('/updateEffectsList', METHODS.POST, {})
+      .then((effectListJson) => {
+        effectsList.current = effectListJson;
+        setEffectsLoaded(true);
+      })
+      .catch((message) => {
+        console.log(message);
+      });
   };
 
   useEffect(() => {
@@ -54,28 +55,14 @@ const NanoLeafHome = () => {
     // Did this to fix console warning
     if (effectsLoaded) {
       console.log(effectsList.current);
+    } else {
+      updateEffectsList();
     }
   }, [effectsLoaded]);
-
-  useEffect(() => {
-    const postToNanoleaf = async (expressEndpoint: string) => {
-      if (updatingState) {
-        console.log('Updating State: ' + selectedEffect.current);
-        sendCommand(expressEndpoint, 'POST', {
-          effect: selectedEffect.current
-        });
-        setUpdatingState(false);
-      } else {
-        console.log('Update Ended');
-      }
-    };
-    postToNanoleaf('/setCurrentEffect');
-  }, [updatingState]);
 
   // Do things with the config if needed
   const sendCommand = async (url: string, method: string, body: object) => {
     let data = null;
-    console.log(selectedEffect.current);
     if (method === METHODS.POST) {
       let config = {
         method: 'post',
@@ -89,6 +76,7 @@ const NanoLeafHome = () => {
       data = await axios.post(url, body);
       if (data != null) {
         console.log(data);
+        return data.data;
       }
     } else if (method === METHODS.GET) {
       data = await axios.get(url, { withCredentials: true });
@@ -129,7 +117,7 @@ const NanoLeafHome = () => {
         <button
           id="fetchBtn"
           className="btn-blue"
-          onClick={() => updateEffects()}
+          onClick={() => setEffectsLoaded(false)}
         >
           Fetch Effects
         </button>

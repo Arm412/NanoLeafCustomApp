@@ -8,7 +8,7 @@ type EffectListProps = {
 const EffectList = (props: EffectListProps) => {
   return (
     <div
-      className="effectDiv text-green-600 cursor-pointer hover:bg-green-900"
+      className="effectDiv"
       onClick={() => {
         props.onEffectClick(props.effectName);
       }}

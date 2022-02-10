@@ -6,8 +6,6 @@ import dotenv from 'dotenv';
 import path from 'path';
 import ip from 'ip';
 import axios, { AxiosRequestConfig } from 'axios';
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
 import {
   updateEffectsList,
   deleteEffectsList,
@@ -21,7 +19,7 @@ const router = express.Router();
 const app = express();
 
 // Serve static files
-app.use(express.static(path.join(__dirname, '..', 'react-client', 'build')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
 const dbString = 'mongodb://127.0.0.1:27017/NanoleafDB';
 
@@ -65,6 +63,8 @@ app.post('/updateEffectsList', async (req: Request, res: Response) => {
   const retrievedEffectList: Array<String> = (await fetchEffectsList()) || [];
   await deleteEffectsList();
   await updateEffectsList(retrievedEffectList);
+  const effectsJson = await getStoredEffects();
+  res.json(effectsJson);
 });
 
 const PORT = process.env.PORT || 80;
