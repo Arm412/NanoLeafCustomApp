@@ -14,7 +14,7 @@ function App() {
             element={
               <ManualMode
                 effectsList={[]}
-                onEffectClick={() => {}}
+                //onEffectClick={() => {}}
                 selectedEffect={''}
               />
             }

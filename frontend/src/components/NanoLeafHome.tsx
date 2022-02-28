@@ -108,7 +108,7 @@ const NanoLeafHome = () => {
         {nanoState === 'MANUAL' ? (
           <ManualMode
             effectsList={effectsList.current}
-            onEffectClick={effectSetClick}
+            //onEffectClick={effectSetClick}
             selectedEffect={selectedEffect.current}
           />
         ) : null}
@@ -116,7 +116,7 @@ const NanoLeafHome = () => {
         {nanoState === 'QUEUE' ? <QueueMode /> : null}
         <button
           id="fetchBtn"
-          className="btn-blue"
+          className="primary-color-btn"
           onClick={() => setEffectsLoaded(false)}
         >
           Fetch Effects
