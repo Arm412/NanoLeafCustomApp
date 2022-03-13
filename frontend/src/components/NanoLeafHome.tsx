@@ -15,17 +15,6 @@ const NanoLeafHome = () => {
   const effectsList = useRef([]);
   const selectedEffect = useRef('');
 
-  const effectSetClick = (e: string) => {
-    selectedEffect.current = e;
-    console.log(selectedEffect.current);
-    const postToNanoleaf = async (expressEndpoint: string) => {
-      sendCommand(expressEndpoint, 'POST', {
-        effect: selectedEffect.current
-      });
-    };
-    postToNanoleaf('/setCurrentEffect');
-  };
-
   const updateEffectsList = async () => {
     sendCommand('/updateEffectsList', METHODS.POST, {})
       .then((effectListJson) => {

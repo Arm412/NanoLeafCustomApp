@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import EffectList from '../EffectList';
 import { EffectContext } from '../NanoLeafHome';
+import { effectSetClick } from '../../helpers/APICalls';
 
 type ManualModeProps = {
   effectsList: string[];
-  //onEffectClick: Function;
   selectedEffect: string;
 };
 
@@ -37,7 +37,14 @@ const ManualMode = (props: ManualModeProps) => {
           </div>
           <div className="man-effect-desc-div">
             <h1 className="text-white text-center text-lg">{selectedEffect}</h1>
-            <button id="setActiveBtn">Set as Active</button>
+            <button
+              onClick={() => {
+                effectSetClick(selectedEffect);
+              }}
+              id="setActiveBtn"
+            >
+              Set as Active
+            </button>
           </div>
         </div>
         <div className="flex-1 center-flex"></div>
