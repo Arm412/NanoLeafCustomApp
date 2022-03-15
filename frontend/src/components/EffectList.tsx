@@ -8,7 +8,7 @@ type EffectListProps = {
 const EffectList = (props: EffectListProps) => {
   return (
     <div
-      className="effectDiv"
+      className="effectDiv primary-color-btn"
       onClick={() => {
         props.onEffectClick(props.effectName);
       }}
